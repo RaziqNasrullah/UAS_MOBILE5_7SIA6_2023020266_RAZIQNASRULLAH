@@ -116,9 +116,19 @@ Base URL yang sedang dipakai bisa dilihat di tab **Admin** aplikasi.
 
 ## 4. Menjalankan Aplikasi
 
+Pastikan sudah berada di branch yang berisi kode (`git checkout claude/lucid-brahmagupta-jdpyvi`)
+dan langkah XAMPP di atas sudah beres.
+
 ```bash
-flutter pub get
-flutter run
+flutter doctor                          # cek Flutter, Android SDK & lisensi
+flutter pub get                         # unduh dependency
+flutter emulators                       # daftar emulator
+flutter emulators --launch <nama>       # jalankan emulator
+flutter devices                         # pastikan emulator / HP terdeteksi
+flutter run                             # emulator -> http://10.0.2.2/apotek_api
+
+# HP fisik (USB debugging aktif, satu Wi-Fi dengan laptop)
+flutter run --dart-define=API_BASE_URL=http://<IP-laptop>/apotek_api
 ```
 
 Kebutuhan: Flutter **3.35 atau lebih baru** (Dart ≥ 3.9; diuji dengan Flutter 3.41.6 / Dart 3.11.4), Android SDK.
