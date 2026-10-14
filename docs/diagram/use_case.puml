@@ -1,0 +1,59 @@
+@startuml use_case
+title Use Case Diagram — MyHealthGw (Apotek Digital HealthGwJirt)
+left to right direction
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+skinparam usecase {
+  BackgroundColor #F1FAEC
+  BorderColor #1C6E7D
+}
+
+actor "Pengguna /\nPembeli" as User
+actor "Admin\nApotek" as Admin
+
+rectangle "Aplikasi MyHealthGw" {
+  usecase "Melihat Beranda\n(sapaan, kategori, unggulan)" as UC1
+  usecase "Melihat Katalog Produk" as UC2
+  usecase "Mencari Produk\n(realtime)" as UC3
+  usecase "Filter Produk\nper Kategori" as UC4
+  usecase "Melihat Detail Produk\n(golongan obat, aturan pakai)" as UC5
+  usecase "Mengelola Keranjang\n(tambah, ubah qty, hapus)" as UC6
+  usecase "Validasi Stok" as UC6a
+  usecase "Checkout Pesanan" as UC7
+  usecase "Hitung Biaya\n(layanan, ongkir, diskon)" as UC7a
+  usecase "Generate Nomor\nINV-YYYYMMDD-NNN" as UC7b
+  usecase "Melihat Riwayat Pesanan" as UC8
+  usecase "Melihat Detail Pesanan" as UC9
+  usecase "Cetak / Simpan\nStruk PDF" as UC10
+
+  usecase "Mengelola Kategori\n(CRUD)" as UC11
+  usecase "Mengelola Produk\n(CRUD + gambar)" as UC12
+  usecase "Mengubah Status Pesanan\n(Selesai / Dibatalkan)" as UC13
+  usecase "Kembalikan Stok" as UC13a
+  usecase "Melihat Dashboard\nPenjualan & Grafik" as UC14
+}
+
+User --> UC1
+User --> UC2
+User --> UC5
+User --> UC6
+User --> UC7
+User --> UC8
+User --> UC10
+
+UC2 <.. UC3 : <<extend>>
+UC2 <.. UC4 : <<extend>>
+UC8 <.. UC9 : <<extend>>
+UC6 ..> UC6a : <<include>>
+UC7 ..> UC6a : <<include>>
+UC7 ..> UC7a : <<include>>
+UC7 ..> UC7b : <<include>>
+
+Admin --> UC11
+Admin --> UC12
+Admin --> UC13
+Admin --> UC14
+Admin --> UC9
+Admin --> UC10
+UC13 ..> UC13a : <<include>>\n(jika dibatalkan)
+@enduml

@@ -1,0 +1,78 @@
+@startuml activity_checkout
+title Activity Diagram — Proses Pemesanan / Checkout
+skinparam activity {
+  BackgroundColor #F1FAEC
+  BorderColor #1C6E7D
+  DiamondBackgroundColor #FFF4E5
+}
+skinparam swimlaneTitleFontStyle bold
+
+|Pengguna|
+start
+:Membuka Katalog / Beranda;
+:Mencari & memilih produk;
+:Membuka Detail Produk;
+|Aplikasi (Flutter + GetX)|
+if (Stok produk > 0?) then (ya)
+  :Tombol "Tambah ke Keranjang" aktif;
+else (tidak)
+  :Tombol nonaktif "Stok Habis";
+  stop
+endif
+|Pengguna|
+:Menekan "Tambah ke Keranjang";
+|Server (PHP + MySQL)|
+:keranjang/add.php
+cek jumlah + stok;
+if (Jumlah <= stok?) then (ya)
+  :INSERT / UPDATE tabel keranjang;
+else (tidak)
+  :Kirim error "Jumlah melebihi stok";
+  |Aplikasi (Flutter + GetX)|
+  :Get.snackbar error;
+  stop
+endif
+|Aplikasi (Flutter + GetX)|
+:Badge keranjang & total diperbarui (Obx);
+|Pengguna|
+:Mengatur jumlah (+/−) di Keranjang;
+:Menekan "Checkout";
+:Mengisi form: nama, no HP,
+metode pengambilan, alamat*, catatan;
+|Aplikasi (Flutter + GetX)|
+if (Form valid?\n(nama wajib, HP 08 & 10-13 digit,\nalamat wajib jika Diantar)) then (ya)
+  :Hitung subtotal, biaya layanan,
+  ongkir, diskon, total;
+else (tidak)
+  :Tampilkan pesan validasi;
+  stop
+endif
+:POST pesanan/checkout.php;
+|Server (PHP + MySQL)|
+:BEGIN TRANSACTION;
+:SELECT keranjang JOIN produk ... FOR UPDATE;
+if (Stok semua item cukup?) then (ya)
+  :Buat nomor INV-YYYYMMDD-NNN
+  (NNN reset setiap hari);
+  :INSERT pesanan;
+  :INSERT detail_pesanan
+  (snapshot nama & harga);
+  :UPDATE produk SET stok = stok − jumlah;
+  :DELETE keranjang;
+  :COMMIT;
+else (tidak)
+  :ROLLBACK;
+  |Aplikasi (Flutter + GetX)|
+  :Get.snackbar "Stok tidak mencukupi";
+  stop
+endif
+|Aplikasi (Flutter + GetX)|
+:Get.offNamed('/checkout-sukses', arguments: pesanan);
+:Tampilkan ringkasan pesanan;
+|Pengguna|
+:Menekan "Lihat & Simpan Struk PDF";
+|Aplikasi (Flutter + GetX)|
+:Generate PDF (package pdf);
+:PdfPreview + simpan ke perangkat (path_provider);
+stop
+@enduml
