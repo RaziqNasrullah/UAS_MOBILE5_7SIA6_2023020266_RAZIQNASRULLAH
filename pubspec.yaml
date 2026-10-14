@@ -19,7 +19,8 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.13.5
+  sdk: ^3.9.0
+  flutter: ">=3.35.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -36,15 +37,18 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
-  get: ^4.7.3
-  http: ^1.6.0
-  intl: ^0.20.3
-  fl_chart: ^1.2.0
-  pdf: ^3.13.1
-  printing: ^5.15.1
-  path_provider: ^2.1.6
-  image_picker: ^1.2.4
-  cached_network_image: ^4.0.4
+  get: ^4.7.2
+  http: ^1.4.0
+  intl: ^0.20.2
+  fl_chart: ^1.0.0
+  pdf: ^3.11.3
+  printing: ^5.14.2
+  path_provider: ^2.1.5
+  image_picker: ^1.1.2
+  cached_network_image: ^3.4.1
+  # Dipakai oleh package pdf/printing. image 4.11.x memanggil API archive yang belum ada
+  # pada versi archive yang kompatibel dengan Dart 3.11, sehingga dibatasi di bawah 4.11.
+  image: ">=4.5.0 <4.11.0"
 dev_dependencies:
   flutter_test:
     sdk: flutter

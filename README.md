@@ -121,7 +121,8 @@ flutter pub get
 flutter run
 ```
 
-Kebutuhan: Flutter SDK stabil terbaru (dikembangkan dengan Flutter 3.47 / Dart 3.13), Android SDK.
+Kebutuhan: Flutter **3.35 atau lebih baru** (Dart ≥ 3.9; diuji dengan Flutter 3.41.6 / Dart 3.11.4), Android SDK.
+Jika muncul error *version solving failed*, jalankan `flutter pub upgrade` lalu `flutter pub get`.
 
 Pengujian:
 
